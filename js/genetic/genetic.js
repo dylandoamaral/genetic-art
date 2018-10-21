@@ -13,6 +13,7 @@ class Genetic {
      * @param {int} genomOptions.maxSize Maximum size of a shape
      * @param {boolean} genomOptions.onlyOneShape Set true if you only want circle or square as shape
      * @param {int} genomOptions.oneShape Set the nature of the shape (0 = square, 1 = circle)
+     * @param {boolean} genomOptions.onlySourceColors Set true if you only want color from the source (more faster)
      */
     constructor(modelData, options = {}, genomOptions = {}) {
         this.modelData = modelData;
@@ -26,8 +27,15 @@ class Genetic {
             minSize: 2,
             maxSize: 4,
             onlyOneShape: false,
-            oneShape: 0
+            oneShape: 0,
+            onlySourceColors: true
         }, genomOptions)
+
+        if(this.genomOptions.onlySourceColors){
+            this.genomOptions = Object.assign({}, {
+                sourceColors: this.sourceColors()
+            }, this.genomOptions)
+        }
 
         this.generation = new Array()
 
@@ -122,5 +130,18 @@ class Genetic {
         let canvas = document.querySelector(".genetic .result canvas");
         canvas.width = this.modelData.width;
         canvas.height = this.modelData.height;
+    }
+
+    /**
+     * Return tab which contain all colors from the source image
+     */
+    sourceColors(){
+        var sourceColors = [];
+        for (let i = 0; i < this.modelData.data.length; i+=4) {
+            //sourceColors = [...sourceColors, [this.modelData.data[i], this.modelData.data[i + 1], this.modelData.data[i + 2]]]
+            sourceColors.push([this.modelData.data[i], this.modelData.data[i + 1], this.modelData.data[i + 2]]) // Much faster
+        }
+        console.log(sourceColors);
+        return sourceColors;
     }
 }

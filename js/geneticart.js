@@ -15,7 +15,7 @@ function loadImage(url, callback) {
     img.crossOrigin = "Anonymous";
 }
 
-loadImage("heart.jpg", (pixelData) => {
+loadImage("./examples/heart.jpg", (pixelData) => {
     new Genetic(pixelData, {
         phenotypePerGeneration: 100,
         genotypePerPhenotype: 1500

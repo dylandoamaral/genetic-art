@@ -22,8 +22,16 @@ class Genotype{
         else this.y = randBtw(0, this.modelData.height)
         if(randBtw(0, 10000) != 0)this.size = gen.size;
         else this.size = randBtw(this.genomOptions.minSize, this.genomOptions.maxSize)
-        if(randBtw(0, 10000) != 0)this.color = gen.color;
-        else this.color = [randBtw(0, 255), randBtw(0, 255), randBtw(0, 255)]
+        
+        if(this.genomOptions.onlySourceColors){
+            if(randBtw(0, 10000) != 0)this.color = gen.color;
+            else this.color = this.genomOptions.sourceColors[randBtw(0, this.genomOptions.sourceColors.length - 1)]
+        }else{
+            if(randBtw(0, 10000) != 0)this.color = gen.color;
+            else this.color = [randBtw(0, 255), randBtw(0, 255), randBtw(0, 255)]
+        }
+
+
         if(this.genomOptions.onlyOneShape){
             this.shape = this.genomOptions.oneShape;
         }else{
@@ -39,7 +47,13 @@ class Genotype{
         this.x = randBtw(0, this.modelData.width)
         this.y = randBtw(0, this.modelData.height)
         this.size = randBtw(this.genomOptions.minSize, this.genomOptions.maxSize)
-        this.color = [randBtw(0, 255), randBtw(0, 255), randBtw(0, 255)]
+        
+        if(this.genomOptions.onlySourceColors){
+            this.color = this.genomOptions.sourceColors[randBtw(0, this.genomOptions.sourceColors.length - 1)]
+        }else{
+            this.color = [randBtw(0, 255), randBtw(0, 255), randBtw(0, 255)]
+        }
+
         if(this.genomOptions.onlyOneShape){
             this.shape = this.genomOptions.oneShape;
         }else{
