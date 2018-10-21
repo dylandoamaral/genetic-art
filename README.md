@@ -1,5 +1,6 @@
 ﻿# genetic-art
 This is an application of a genetic algorithm in javascript
+
 This idea come from that video : https://www.youtube.com/watch?v=8ShmIgaSejY 
 
 ## To do
