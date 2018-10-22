@@ -4,7 +4,7 @@ This is an application of a genetic algorithm in javascript
 
 This idea come from that video : https://www.youtube.com/watch?v=8ShmIgaSejY 
 
-## Example
+## Examples
 
 Duration of the following process : 30 minutes
 ![Image of example](https://github.com/dylandoamaral/genetic-art/blob/master/examples/heart.jpg)
