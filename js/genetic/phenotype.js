@@ -1,4 +1,14 @@
-class Phenotype {
+/*
+ * File Created: Sunday, 21st October 2018 10:50:22 pm
+ * Author: dylan DO AMARAL (do.amaral.dylan@gmail.com)
+ * -----
+ * Last Modified: Monday, 22nd October 2018 3:06:09 pm
+ * Modified By: dylan DO AMARAL (do.amaral.dylan@gmail.com>)
+ * -----
+ * Copyright 2018 - dylandoamaral
+ */
+
+ class Phenotype {
     /**
      * @param {ImageDate} modelData Data of the source image
      * @param {int} nGenotype Number of gene per phenotype
@@ -67,10 +77,10 @@ class Phenotype {
             ctx.beginPath();
             switch (shape) {
                 case 0:
-                    ctx.rect(x, y, size, size);
+                    ctx.rect(x + size/2, y + size/2, size, size);
                     break;
                 case 1:
-                    ctx.arc(x, y, size, 0, 2 * Math.PI);
+                    ctx.arc(x, y, size/2, 0, 2 * Math.PI);
                     break;
             }
             ctx.fillStyle = `rgb(${color[0]},${color[1]},${color[2]})`;

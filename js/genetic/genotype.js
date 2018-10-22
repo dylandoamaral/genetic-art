@@ -1,3 +1,13 @@
+/*
+ * File Created: Sunday, 21st October 2018 10:50:22 pm
+ * Author: dylan DO AMARAL (do.amaral.dylan@gmail.com)
+ * -----
+ * Last Modified: Monday, 22nd October 2018 3:06:50 pm
+ * Modified By: dylan DO AMARAL (do.amaral.dylan@gmail.com>)
+ * -----
+ * Copyright 2018 - dylandoamaral
+ */
+
 /**
  * A genotype is an element of the new image generated with an algorithm
  */

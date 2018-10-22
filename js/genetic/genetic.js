@@ -1,3 +1,13 @@
+/*
+ * File Created: Sunday, 21st October 2018 10:50:22 pm
+ * Author: dylan DO AMARAL (do.amaral.dylan@gmail.com)
+ * -----
+ * Last Modified: Monday, 22nd October 2018 3:06:59 pm
+ * Modified By: dylan DO AMARAL (do.amaral.dylan@gmail.com>)
+ * -----
+ * Copyright 2018 - dylandoamaral
+ */
+
 class Genetic {
 
     /**
@@ -141,7 +151,6 @@ class Genetic {
             //sourceColors = [...sourceColors, [this.modelData.data[i], this.modelData.data[i + 1], this.modelData.data[i + 2]]]
             sourceColors.push([this.modelData.data[i], this.modelData.data[i + 1], this.modelData.data[i + 2]]) // Much faster
         }
-        console.log(sourceColors);
         return sourceColors;
     }
 }
