@@ -11,27 +11,28 @@
 function loadImage(url, callback) {
     var img = new Image();
     img.onload = () => {
+        img = maxSizeImage(img, 500);
         let canvas = document.querySelector(".genetic .model canvas");
         let ctx = canvas.getContext('2d');
+
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0, img.width, img.height);
 
-        let pixelData = ctx.getImageData(0, 0, img.width, img.height);
-
-        callback(pixelData)
+        callback(getImageData(img))
     };
     img.src = url
     img.crossOrigin = "Anonymous";
 }
 
-loadImage("./examples/animal.jpg", (pixelData) => {
+loadImage("./examples/heart.jpg", (pixelData) => {
     new Genetic(pixelData, {
         phenotypePerGeneration: 50,
-        genotypePerPhenotype: 2500
+        genotypePerPhenotype: 1600
     }, {
-        minSize: 12,
+        minSize: 10,
         maxSize: 20,
-        onlyOneShape: false
+        onlyOneShape: true,
+        oneShape: 1
     })
 })

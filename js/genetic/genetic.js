@@ -27,9 +27,12 @@ class Genetic {
      */
     constructor(modelData, options = {}, genomOptions = {}) {
         this.modelData = modelData;
+        this.ratio = this.getRatio(300);
+
+        this.minifyModelData = scaleImageData(this.modelData, this.ratio);
 
         this.options = Object.assign({}, {
-            phenotypePerGeneration: 50,
+            phenotypePerGeneration: 50, 
             genotypePerPhenotype: 1000
         }, options)
 
@@ -38,16 +41,18 @@ class Genetic {
             maxSize: 4,
             onlyOneShape: false,
             oneShape: 0,
-            onlySourceColors: true
+            onlySourceColors: true,
+            mutationRatio: 700
         }, genomOptions)
 
         if(this.genomOptions.onlySourceColors){
             this.genomOptions = Object.assign({}, {
-                sourceColors: this.sourceColors()
+                sourceColors: getAllUniquePixels(this.minifyModelData)
             }, this.genomOptions)
         }
 
         this.generation = new Array()
+        this.generationCounter = 0;
 
         this.initialiseCanvas();
 
@@ -57,8 +62,12 @@ class Genetic {
             this.generation = [...this.generation, phenotype]
         }
 
+        for (const phenotype of this.generation) {
+            phenotype.similarityRatio = similarityBtwImageData(this.minifyModelData, scaleImageData(phenotype.generate(), this.ratio), true)
+        }
+
         this.generation.sort((a, b) =>
-            (a.similarityRatio ? a.similarityRatio : a.similarity()) - (b.similarityRatio ? b.similarityRatio : b.similarity())) // Baddest to Best
+            (a.similarityRatio - b.similarityRatio)) // Baddest to Best
 
         window.setInterval(() => {
             this.nextGeneration();
@@ -66,10 +75,27 @@ class Genetic {
     }
 
     /**
+     * Determine the ratio for an image according to a max value
+     * @param {number} max
+     * @returns {number}
+     */
+    getRatio(max){
+        let w = this.modelData.width;
+        let h = this.modelData.height;
+        let ratio = 1;
+
+        if(w > h) ratio = max / w;
+        else ratio = max / h;
+
+        return ratio;
+    }
+
+    /**
      * Generate the next generation
      */
     nextGeneration() {
         let nextGeneration = [];
+        this.generationCounter++;
 
         for (let i = 0; i < 3 * this.options.phenotypePerGeneration / 4; i++) {
             nextGeneration = [...nextGeneration, this.makeChildren()]
@@ -82,8 +108,12 @@ class Genetic {
 
         this.generation = nextGeneration;
  
+        for (const phenotype of this.generation) {
+            phenotype.similarityRatio = similarityBtwImageData(this.minifyModelData, scaleImageData(phenotype.generate(), this.ratio), true)
+        }
+
         this.generation.sort((a, b) =>
-            (a.similarityRatio ? a.similarityRatio : a.similarity()) - (b.similarityRatio ? b.similarityRatio : b.similarity())) // Baddest to Best
+            (a.similarityRatio - b.similarityRatio)) // Baddest to Best
         
         this.drawExample()
 
@@ -91,7 +121,9 @@ class Genetic {
         for (let i = 0; i < this.options.phenotypePerGeneration; i++) {
             total += this.generation[i].similarityRatio
         }
-        console.log(this.generation[this.options.phenotypePerGeneration - 1].similarityRatio + ", total : " + total/this.options.phenotypePerGeneration);
+        console.log("Generation n°" + this.generationCounter 
+                    + " Best : " + this.generation[this.options.phenotypePerGeneration - 1].similarityRatio 
+                    + ", total : " + total/this.options.phenotypePerGeneration);
     }
 
     /**
@@ -101,8 +133,12 @@ class Genetic {
     makeChildren() {
         let father = this.rankSelection();
         let mother = this.rankSelection();
+        while(mother == father){
+            mother = this.rankSelection(); // I don't want monoparent
+        }
+
         let children = new Phenotype(this.modelData, this.options.genotypePerPhenotype, this.genomOptions);
-        children.inherite(father, mother)
+        children.inherite(this.generation[father], this.generation[mother])
         return children;
     }
 
@@ -118,7 +154,7 @@ class Genetic {
         for (let i = 0; i < this.options.phenotypePerGeneration; i++) {
             total += i * i;
             if (rand <= total) {
-                return this.generation[i];
+                return i;
             }
         }
     }
@@ -130,7 +166,7 @@ class Genetic {
         let phenotype = this.generation[this.options.phenotypePerGeneration - 1]; // The best
         let canvas = document.querySelector(".genetic .result canvas");
         let ctx = canvas.getContext('2d');
-        ctx.putImageData(new ImageData(phenotype.pixelData(), this.modelData.width, this.modelData.height), 0, 0)
+        ctx.putImageData(phenotype.generate(), 0, 0)
     }
 
     /**
@@ -140,17 +176,5 @@ class Genetic {
         let canvas = document.querySelector(".genetic .result canvas");
         canvas.width = this.modelData.width;
         canvas.height = this.modelData.height;
-    }
-
-    /**
-     * Return tab which contain all colors from the source image
-     */
-    sourceColors(){
-        var sourceColors = [];
-        for (let i = 0; i < this.modelData.data.length; i+=4) {
-            //sourceColors = [...sourceColors, [this.modelData.data[i], this.modelData.data[i + 1], this.modelData.data[i + 2]]]
-            sourceColors.push([this.modelData.data[i], this.modelData.data[i + 1], this.modelData.data[i + 2]]) // Much faster
-        }
-        return sourceColors;
     }
 }
