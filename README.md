@@ -6,7 +6,7 @@ This idea come from that video : https://www.youtube.com/watch?v=8ShmIgaSejY
 
 ## Examples
 
-Duration of the following process : 30 minutes (V1)
+Duration of the following process : 20 minutes (V2)
 ![Image of example](https://github.com/dylandoamaral/genetic-art/blob/master/examples/heart.jpg)
 ![Image of example](https://github.com/dylandoamaral/genetic-art/blob/master/examples/heart_result.jpg)
 
