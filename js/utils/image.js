@@ -188,10 +188,9 @@ function similarityBtwImageData(left, right, strict = false, strictThreshold = 5
         for (let y = 0; y < left.height; y++) {
             pixelLeft = getPixel(left , x, y);
             pixelRight = getPixel(right, x, y);
-            difference = Math.abs(
-                pixelLeft[0] - pixelRight[0] + 
-                pixelLeft[1] - pixelRight[1] + 
-                pixelLeft[2] - pixelRight[2]) / 3
+            difference = (Math.abs(pixelLeft[0] - pixelRight[0]) + 
+                          Math.abs(pixelLeft[1] - pixelRight[1]) + 
+                          Math.abs(pixelLeft[2] - pixelRight[2])) / 3
             if(strict){
                 if(difference < strictThreshold){
                     similarityResult += 256 - (difference * 256) / strictThreshold

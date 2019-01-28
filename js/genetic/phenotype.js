@@ -73,14 +73,14 @@
         ctx.fill();
 
         for (const genotype of this.adn) {
-            const { x, y, size, color, shape } = genotype;
+            const { x, y, width, height, color, shape } = genotype;
             ctx.beginPath();
             switch (shape) {
                 case 0:
-                    ctx.rect(x + size/2, y + size/2, size, size);
+                    ctx.rect(x - width/2, y - height/2, width, height);
                     break;
                 case 1:
-                    ctx.arc(x, y, size/2, 0, 2 * Math.PI);
+                    ctx.ellipse(x, y, width, height, 0, 0, 2 * Math.PI);
                     break;
             }
             ctx.fillStyle = `rgb(${color[0]},${color[1]},${color[2]})`;

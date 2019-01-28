@@ -37,12 +37,14 @@ class Genetic {
         }, options)
 
         this.genomOptions = Object.assign({}, {
-            minSize: 2,
-            maxSize: 4,
+            minWidth: 4,
+            maxWidth: 16,
+            minHeight: 4,
+            maxHeight: 16,
             onlyOneShape: false,
             oneShape: 0,
             onlySourceColors: true,
-            mutationRatio: 700
+            mutationRatio: 500
         }, genomOptions)
 
         if(this.genomOptions.onlySourceColors){
@@ -62,8 +64,8 @@ class Genetic {
             this.generation = [...this.generation, phenotype]
         }
 
-        for (const phenotype of this.generation) {
-            phenotype.similarityRatio = similarityBtwImageData(this.minifyModelData, scaleImageData(phenotype.generate(), this.ratio), true)
+        for (let i = 0; i < this.options.phenotypePerGeneration; i++) {
+            this.generation[i].similarityRatio = similarityBtwImageData(this.minifyModelData, scaleImageData(this.generation[i].generate(), this.ratio))
         }
 
         this.generation.sort((a, b) =>
@@ -71,7 +73,7 @@ class Genetic {
 
         window.setInterval(() => {
             this.nextGeneration();
-        }, 100)
+        }, 1)
     }
 
     /**
@@ -97,10 +99,13 @@ class Genetic {
         let nextGeneration = [];
         this.generationCounter++;
 
-        for (let i = 0; i < 3 * this.options.phenotypePerGeneration / 4; i++) {
+        for (let i = 0; i < 1 * this.options.phenotypePerGeneration / 10; i++) {
+            nextGeneration = [...nextGeneration, this.generation[this.options.phenotypePerGeneration - 1 - i]]
+        }
+        for (let i = 1 * this.options.phenotypePerGeneration / 10; i < 9 * this.options.phenotypePerGeneration / 10; i++) {
             nextGeneration = [...nextGeneration, this.makeChildren()]
         }
-        for (let i = 3 * this.options.phenotypePerGeneration / 4; i < this.options.phenotypePerGeneration; i++) {
+        for (let i = 9 * this.options.phenotypePerGeneration / 10; i < this.options.phenotypePerGeneration; i++) {
             let phenotype = new Phenotype(this.modelData, this.options.genotypePerPhenotype, this.genomOptions);
             phenotype.random();
             nextGeneration = [...nextGeneration, phenotype]
@@ -108,8 +113,8 @@ class Genetic {
 
         this.generation = nextGeneration;
  
-        for (const phenotype of this.generation) {
-            phenotype.similarityRatio = similarityBtwImageData(this.minifyModelData, scaleImageData(phenotype.generate(), this.ratio), true)
+        for (let i = 1 * this.options.phenotypePerGeneration / 10; i < this.options.phenotypePerGeneration; i++) {
+            this.generation[i].similarityRatio = similarityBtwImageData(this.minifyModelData, scaleImageData(this.generation[i].generate(), this.ratio))
         }
 
         this.generation.sort((a, b) =>
@@ -148,11 +153,12 @@ class Genetic {
      */
     rankSelection() {
         var total = 0;
-        for (let i = 0; i < this.options.phenotypePerGeneration; i++) total += i * i;
+        var advantage = 2;
+        for (let i = 0; i < this.options.phenotypePerGeneration; i++) total += i * advantage;
         var rand = randBtw(0, total)
         total = 0
         for (let i = 0; i < this.options.phenotypePerGeneration; i++) {
-            total += i * i;
+            total += i * advantage;
             if (rand <= total) {
                 return i;
             }

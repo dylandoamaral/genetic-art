@@ -26,28 +26,21 @@ class Genotype{
      * @param {Genotype} gen The descendent of this genotype
      */
     inherite(gen){
-        if(randBtw(0, this.genomOptions.mutationRatio) != 0) this.x = gen.x
-        else this.x = randBtw(0, this.modelData.width)
-        if(randBtw(0, this.genomOptions.mutationRatio) != 0) this.y = gen.y
-        else this.y = randBtw(0, this.modelData.height)
-        if(randBtw(0, this.genomOptions.mutationRatio) != 0) this.size = gen.size;
-        else this.size = randBtw(this.genomOptions.minSize, this.genomOptions.maxSize)
-        
-        if(this.genomOptions.onlySourceColors){
-            if(randBtw(0, this.genomOptions.mutationRatio) != 0) this.color = gen.color;
-            else this.color = this.genomOptions.sourceColors[randBtw(0, this.genomOptions.sourceColors.length - 1)]
+        if(randBtw(0, this.genomOptions.mutationRatio) != 0){
+            this.x = gen.x
+            this.y = gen.y
+            this.width = gen.width;
+            this.height = gen.height;
+            this.color = gen.color;
+
+            if(this.genomOptions.onlyOneShape){
+                this.shape = this.genomOptions.oneShape;
+            }else{
+                this.shape = gen.shape;
+            }  
         }else{
-            if(randBtw(0, this.genomOptions.mutationRatio) != 0) this.color = gen.color;
-            else this.color = [randBtw(0, 255), randBtw(0, 255), randBtw(0, 255)]
+            this.random()
         }
-
-
-        if(this.genomOptions.onlyOneShape){
-            this.shape = this.genomOptions.oneShape;
-        }else{
-            if(randBtw(0, this.genomOptions.mutationRatio) != 0) this.shape = gen.shape;
-            else this.shape = randBtw(0, 1)
-        }  
     }
 
     /**
@@ -56,8 +49,9 @@ class Genotype{
     random(){
         this.x = randBtw(0, this.modelData.width)
         this.y = randBtw(0, this.modelData.height)
-        this.size = randBtw(this.genomOptions.minSize, this.genomOptions.maxSize)
-        
+        this.width = randBtw(this.genomOptions.minWidth, this.genomOptions.maxWidth)
+        this.height = randBtw(this.genomOptions.minHeight, this.genomOptions.maxHeight)
+
         if(this.genomOptions.onlySourceColors){
             this.color = this.genomOptions.sourceColors[randBtw(0, this.genomOptions.sourceColors.length - 1)]
         }else{

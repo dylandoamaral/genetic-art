@@ -11,7 +11,7 @@
 function loadImage(url, callback) {
     var img = new Image();
     img.onload = () => {
-        img = maxSizeImage(img, 500);
+        img = maxSizeImage(img, 600);
         let canvas = document.querySelector(".genetic .model canvas");
         let ctx = canvas.getContext('2d');
 
@@ -25,14 +25,16 @@ function loadImage(url, callback) {
     img.crossOrigin = "Anonymous";
 }
 
-loadImage("./examples/heart.jpg", (pixelData) => {
+loadImage("./examples/rajang.jpg", (pixelData) => {
     new Genetic(pixelData, {
-        phenotypePerGeneration: 50,
-        genotypePerPhenotype: 1600
+        phenotypePerGeneration: 20,
+        genotypePerPhenotype: 5000
     }, {
-        minSize: 10,
-        maxSize: 20,
+        minWidth: 6,
+        maxWidth: 12,
+        minHeight: 6,
+        maxHeight: 12,
         onlyOneShape: true,
-        oneShape: 1
+		oneShape: 1
     })
 })
